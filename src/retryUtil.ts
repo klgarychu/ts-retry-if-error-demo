@@ -1,12 +1,13 @@
 export interface RetryConfig {
   readonly retryAttemptCount: number;
+  // eslint-disable-next-line no-unused-vars
   readonly isRetryable: (error: unknown) => boolean;
 }
 
 const DEFAULT_RETRY_ATTEMPT_COUNT = 3;
 const DEFAULT_RETRY_CONFIG: RetryConfig = {
   retryAttemptCount: DEFAULT_RETRY_ATTEMPT_COUNT,
-  isRetryable: (error: unknown) => true,
+  isRetryable: () => true,
 };
 
 export async function invokeAndRetryIfError<T>(

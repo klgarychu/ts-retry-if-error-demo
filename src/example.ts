@@ -9,7 +9,8 @@ const randomThrowErrorFn = async function () {
   }
 };
 
-invokeAndRetryIfError(randomThrowErrorFn).then((result) => {
+invokeAndRetryIfError(randomThrowErrorFn)
+  .then((result) => {
     console.log(`You got ${result}`);
   })
   .catch(() => {
