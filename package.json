@@ -1,0 +1,33 @@
+{
+  "name": "ts-dev-repository",
+  "version": "1.0.0",
+  "description": "\"# ts-dev-repository\"",
+  "main": "dist/lib/retryUtil.js",
+  "types": "dist/types/retryUtil.d.ts",
+  "typings": "dist/types/retryUtil.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint -c .eslintrc.js --ext .ts src/",
+    "prettier": "prettier --write src/"
+  },
+  "keywords": [],
+  "author": "klgarychu@gmail.com",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/jest": "^29.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "eslint": "^8.52.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^5.0.0"
+  }
+}
