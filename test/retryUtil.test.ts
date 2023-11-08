@@ -96,7 +96,6 @@ describe('invokeAndRetryIfError', () => {
     expect(fnMock).toHaveBeenCalledTimes(2);
   });
 
-  // TODO
   test('retry for a customized retry attempt count', async () => {
     const customRetryConfig: RetryConfig = { retryAttemptCount: 5, isRetryable: checkErrorIfRetryable };
     const fnMock = jest.fn();
