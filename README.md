@@ -1,5 +1,3 @@
-"# ts-dev-repository" 
-
 ## Intro
 
 This is a simple retry wrapper over a function. The wrapper will retry when the function throws error which is retryable and the retry quota has not been used up. 
