@@ -1,10 +1,10 @@
 {
-  "name": "ts-dev-repository",
+  "name": "ts-retry-if-error-demo",
   "version": "1.0.0",
-  "description": "\"# ts-dev-repository\"",
-  "main": "dist/lib/retryUtil.js",
-  "types": "dist/types/retryUtil.d.ts",
-  "typings": "dist/types/retryUtil.d.ts",
+  "description": "\"# ts-retry-if-error-demo\"",
+  "main": "dist/lib/v2/example.js",
+  "types": "dist/types/v2/retryUtil.d.ts",
+  "typings": "dist/types/v2/retryUtil.d.ts",
   "directories": {
     "test": "test"
   },
