@@ -3,6 +3,7 @@
 This is a simple retry wrapper over a function. The wrapper will retry the function if
   - error thrown by function
   - function result
+  
 is retryable.
 
 _This project is for assignment and demonstration purpose. Not for production use._
@@ -20,19 +21,35 @@ _This project is for assignment and demonstration purpose. Not for production us
 ## Example
 
 ```
-import { invokeAndRetryIfError } from './retryUtil';
-
-const randomThrowErrorFn = async function () {
-  if (Math.random() > 0.1) {
-    console.log('Unlucky. You got some error.');
+const throwTrickyDice = async (): Promise<number> => {
+  const randomNumber = Math.random();
+  if (randomNumber < 0.3) {
+    console.log('You dropped the dice. Please throw again');
     throw new Error();
   } else {
-    return 'Lucky';
+    return Math.ceil(randomNumber * 6);
   }
 };
 
-invokeAndRetryIfError(randomThrowErrorFn).then((result) => {
-    console.log(`You got ${result}`);
+const retryConfig: RetryConfig<Result<number, unknown>> = {
+  retryAttemptCount: 5,
+  isRetryable: (result: Result<number, unknown>) => {
+    if (result.ok) {
+      if (result.value < 5) {
+        console.log(`Your dice got ${result.value}. A bit small. Please throw again`);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  },
+};
+
+invokeAndRetry(throwTrickyDice, retryConfig)
+  .then((result) => {
+    console.log(`Your dice got ${result} finally. No more retry`);
   })
   .catch(() => {
     console.log('Your retry quota is used up!');
