@@ -14,7 +14,7 @@ export async function invokeAndRetryIfError<T>(
   fn: () => Promise<T>,
   customizedRetryConfig?: Partial<RetryConfig>,
 ): Promise<T> {
-  const retryConfig: RetryConfig = Object.assign({}, DEFAULT_RETRY_CONFIG, customizedRetryConfig);
+  const retryConfig: RetryConfig = { ...DEFAULT_RETRY_CONFIG, ...customizedRetryConfig };
   try {
     return await fn();
   } catch (error: unknown) {
