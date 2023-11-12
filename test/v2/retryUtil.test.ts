@@ -12,7 +12,7 @@ describe('invokeAndRetry', () => {
   const TEST_RETRY_ATTEMPT_COUNT = 3;
   const TEST_ISRETRYABLE = (result: Result<string>) =>
     result.ok ? checkValueIfRetryable(result.value) : checkErrorIfRetryable(result.thrownValue);
-  const TEST_RETRY_CONFIG: RetryConfig<Result<string, unknown>> = {
+  const TEST_RETRY_CONFIG: RetryConfig<Result<string>> = {
     retryAttemptCount: TEST_RETRY_ATTEMPT_COUNT,
     isRetryable: TEST_ISRETRYABLE,
   };
@@ -81,7 +81,7 @@ describe('invokeAndRetry', () => {
   });
 
   test('should not retry if isRetryable is set to always return false', async () => {
-    const alwaysNotRetryable: RetryConfig<Result<string, unknown>> = {
+    const alwaysNotRetryable: RetryConfig<Result<string>> = {
       retryAttemptCount: TEST_RETRY_ATTEMPT_COUNT,
       isRetryable: () => false,
     };
@@ -149,7 +149,7 @@ describe('invokeAndRetry', () => {
   });
 
   test('retry for a customized retry attempt count', async () => {
-    const customRetryConfig: RetryConfig<Result<string, unknown>> = {
+    const customRetryConfig: RetryConfig<Result<string>> = {
       retryAttemptCount: 5,
       isRetryable: TEST_ISRETRYABLE,
     };

@@ -10,9 +10,9 @@ const throwTrickyDice = async (): Promise<number> => {
   }
 };
 
-const retryConfig: RetryConfig<Result<number, unknown>> = {
+const retryConfig: RetryConfig<Result<number>> = {
   retryAttemptCount: 5,
-  isRetryable: (result: Result<number, unknown>) => {
+  isRetryable: (result: Result<number>) => {
     if (result.ok) {
       if (result.value < 5) {
         console.log(`Your dice got ${result.value}. A bit small. Please throw again`);

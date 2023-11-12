@@ -1,10 +1,15 @@
 ## Intro
 
-This is a simple retry wrapper over a function. The wrapper will retry the function if
+This is a simple retry wrapper (`invokeAndRetry`) over a function. The wrapper will retry the function if
   - error thrown by function
   - function result
   
 is retryable.
+
+Configuration supports:
+  - retry attempt count
+  - custom function to determine if retry is needed, based on function result and error if any
+  - if backoff is needed (current it just supports fixed backoff of 1 second as for demo)
 
 _This project is for assignment and demonstration purpose. Not for production use._
 
@@ -31,9 +36,9 @@ const throwTrickyDice = async (): Promise<number> => {
   }
 };
 
-const retryConfig: RetryConfig<Result<number, unknown>> = {
+const retryConfig: RetryConfig<Result<number>> = {
   retryAttemptCount: 5,
-  isRetryable: (result: Result<number, unknown>) => {
+  isRetryable: (result: Result<number>) => {
     if (result.ok) {
       if (result.value < 5) {
         console.log(`Your dice got ${result.value}. A bit small. Please throw again`);
