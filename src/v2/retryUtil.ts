@@ -4,6 +4,7 @@ export interface RetryConfig<Result> {
   readonly retryAttemptCount: number;
   // eslint-disable-next-line no-unused-vars
   readonly isRetryable: (result: Result) => boolean;
+  readonly backoff?: boolean;
 }
 
 const invoke = async <T>(fn: () => Promise<T>): Promise<Result<T, unknown>> => {
@@ -23,6 +24,8 @@ const getResultValue = <T>(result: Result<T, unknown>): T => {
   }
 };
 
+const BACKOFF_TIME_IN_MS = 1000;
+
 export const invokeAndRetry = async <T>(
   fn: () => Promise<T>,
   retryConfig: RetryConfig<Result<T, unknown>>,
@@ -31,6 +34,9 @@ export const invokeAndRetry = async <T>(
   invokedResult = await invoke(fn);
   for (let i = 0; i < retryConfig.retryAttemptCount; i++) {
     if (retryConfig.isRetryable(invokedResult)) {
+      if (retryConfig.backoff) {
+        await new Promise((resolve) => setTimeout(resolve, BACKOFF_TIME_IN_MS));
+      }
       invokedResult = await invoke(fn);
     } else {
       break;

@@ -16,11 +16,24 @@ describe('invokeAndRetry', () => {
     retryAttemptCount: TEST_RETRY_ATTEMPT_COUNT,
     isRetryable: TEST_ISRETRYABLE,
   };
+  const advanceTimeInMs = async (ms: number) => {
+    jest.advanceTimersByTime(ms);
+    return new Promise((resolve) => jest.requireActual('timers').setImmediate(resolve));
+  };
+  const TEST_BACKOFF_TIME_IN_MS = 1000;
 
   test('return without retry if no error and not retryable result', async () => {
     const fnMock = jest.fn();
     fnMock.mockReturnValue(SUCCESSFUL_RESULT);
     const result = await invokeAndRetry(fnMock, TEST_RETRY_CONFIG);
+    expect(result).toBe(SUCCESSFUL_RESULT);
+    expect(fnMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('return without retry if no error and not retryable result, and with backoff', async () => {
+    const fnMock = jest.fn();
+    fnMock.mockReturnValue(SUCCESSFUL_RESULT);
+    const result = await invokeAndRetry(fnMock, { ...TEST_RETRY_CONFIG, backoff: true });
     expect(result).toBe(SUCCESSFUL_RESULT);
     expect(fnMock).toHaveBeenCalledTimes(1);
   });
@@ -32,6 +45,21 @@ describe('invokeAndRetry', () => {
     const result = await invokeAndRetry(fnMock, TEST_RETRY_CONFIG);
     expect(result).toBe(SUCCESSFUL_RESULT);
     expect(fnMock).toHaveBeenCalledTimes(2);
+  });
+
+  test('retry once and return for first time error by default retry config, and with backoff', async () => {
+    jest.useFakeTimers();
+    const fnMock = jest.fn();
+    fnMock.mockRejectedValueOnce(RETRYABLE_ERROR);
+    fnMock.mockReturnValue(SUCCESSFUL_RESULT);
+    const invokeFnPromise = invokeAndRetry(fnMock, { ...TEST_RETRY_CONFIG, backoff: true });
+    await advanceTimeInMs(TEST_BACKOFF_TIME_IN_MS);
+    expect(fnMock).toHaveBeenCalledTimes(1);
+    await advanceTimeInMs(TEST_BACKOFF_TIME_IN_MS);
+    const result = await invokeFnPromise;
+    expect(result).toBe(SUCCESSFUL_RESULT);
+    expect(fnMock).toHaveBeenCalledTimes(2);
+    jest.useRealTimers();
   });
 
   test('retry once and return if first time result is retryable', async () => {
